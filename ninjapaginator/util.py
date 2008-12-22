@@ -76,3 +76,15 @@ class NinjaPaginator(object):
             self.output['right_page_numbers'] = range(self.pages -1, self.pages +1)
         return self.output
 
+    def filmfeed_style(self):
+        if self.pages < self.frame_size:
+            self.output['page_numbers'] = range(1, self.pages + 1)
+        elif self.page_num < (self.frame_size / 2) + 1:
+            self.output['page_numbers'] = range(1, self.frame_size + 1)
+        elif self.page_num >= (self.frame_size / 2) + 1 and self.pages - (self.frame_size / 2) <= self.page_num:
+            self.output['page_numbers'] = range(self.pages - self.frame_size + 1, self.pages + 1)
+        elif self.page_num >= (self.frame_size / 2) + 1:
+            start = self.page_num - (self.frame_size / 2)
+            end = self.page_num + (self.frame_size / 2)
+            self.output['page_numbers'] = range(start, end + 1)
+        return self.output

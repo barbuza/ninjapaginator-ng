@@ -42,3 +42,13 @@
     <span class="digg_nextprev_disabled">Next &gt;&gt;</span>
 {% endif %}
 {% endif %}
+
+{% if filmfeed %}
+{% for i in page_numbers %}
+    {% ifequal i page_num %}
+        <span class="filmfeed_pages_disabled">{{ i }}</span>
+    {% else %}
+        <a href='?page={{ i }}' class="filmfeed_pages">{{ i }}</a>
+    {% endifequal %}
+{% endfor %}
+{% endif %}
