@@ -7,6 +7,9 @@ from django.core.paginator import Paginator, InvalidPage
 class NinjaPaginator(object):
     """
     Pagination decorator with multiple types of pagination
+    Should be used along with 'render_to' decorator
+    from django-annoying application
+    http://www.assembla.com/spaces/django-annoying
     """
 
     def __init__(self, object_list='object_list', style='digg', per_page=10, frame_size=8):

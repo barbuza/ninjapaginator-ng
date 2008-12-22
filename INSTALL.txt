@@ -1,0 +1,7 @@
+Installation instruction:
+
+* Copy ninjapaginator directory to your django project or put in on PYTHONPATH.
+* Add 'ninjapaginator' in settings.py file to INSTALLED_APPS tuple
+* Copy paginator.css to you static files folder and add it to base html template
+
+That's it.
