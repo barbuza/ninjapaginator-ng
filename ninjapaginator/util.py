@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.utils.datastructures import MultiValueDictKeyError
-from django.core.paginator import Paginator, InvalidPage
+from django.core.paginator import Paginator, EmptyPage
+from django.http import Http404
+
 
 
 class NinjaPaginator(object):
@@ -41,7 +43,10 @@ class NinjaPaginator(object):
         except (ValueError, MultiValueDictKeyError):           
             self.page_num = 1          
         self.paginator = Paginator(self.paginate_qs, self.per_page)
-        self.page = self.paginator.page(self.page_num)
+        try:
+            self.page = self.paginator.page(self.page_num)
+        except EmptyPage:
+            raise  Http404()
         self.output['page_num'] = self.page_num
         self.output['per_page'] = self.per_page
         self.pages = self.paginator.num_pages
