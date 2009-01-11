@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import urllib
+
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404
@@ -32,16 +34,27 @@ class NinjaPaginator(object):
     
     def decorate(self, request, *args, **kwargs):
         """
-        style paginator according to 'style' parameter
+        style pagination according to 'style' parameter
         """
         self.output = self.function(request, *args, **kwargs)
-        if not isinstance(self.output, dict):                       
-            return self.output                  
-        self.paginate_qs = self.output.pop(self.object_list) 
-        try:                                                   
-            self.page_num = int(request.GET['page'])                
-        except (ValueError, MultiValueDictKeyError):           
-            self.page_num = 1          
+        if not isinstance(self.output, dict):
+            return self.output
+        
+        params = request.GET.copy()
+        
+        if "page" in params:
+            self.page_num = int(params.pop('page')[0])
+        else:
+            self.page_num = 1
+
+        if "per_page" in params:
+            self.per_page = int(params['per_page'])
+        else:
+            params['per_page'] = self.per_page
+            
+        extra_params = urllib.urlencode(params)
+
+        self.paginate_qs = self.output.pop(self.object_list)
         self.paginator = Paginator(self.paginate_qs, self.per_page)
         try:
             self.page = self.paginator.page(self.page_num)
@@ -49,6 +62,7 @@ class NinjaPaginator(object):
             raise  Http404()
         self.output['page_num'] = self.page_num
         self.output['per_page'] = self.per_page
+        self.output['extra_params'] = extra_params
         self.pages = self.paginator.num_pages
         self.output[self.object_list] = self.page.object_list
         self.output[self.style] = True
@@ -87,4 +101,13 @@ class NinjaPaginator(object):
             start = self.page_num - (self.frame_size / 2)
             end = self.page_num + (self.frame_size / 2)
             self.output['page_numbers'] = range(start, end + 1)
+        return self.output
+    
+    def muzx_style(self):
+        side_size = int(self.frame_size / 2.0)
+        left_plus = max(0, side_size - (self.pages - self.page_num))
+        right_plus = max(0, side_size - (self.page_num - 1))
+        prev_pages = range(1, self.page_num)[-1 * (side_size + left_plus):]
+        next_pages = range(self.page_num + 1, self.pages + 1)[:side_size + right_plus]
+        self.output['page_numbers'] = prev_pages + [self.page_num] + next_pages
         return self.output

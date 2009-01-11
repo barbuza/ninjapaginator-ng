@@ -98,3 +98,26 @@ span.filmfeed_pages_disabled {
     margin-top:0.15em;
     padding:0.1em 0.5em 0.1em 0.4em;
 }
+
+
+#muzx_paginator {
+    overflow: hidden;
+}
+
+#muzx_paginator_left {
+    float: left;
+}
+
+#muzx_paginator_left a.muzx_pages_current {
+   background-color:#CDDF00; 
+   padding:4px;
+   color:#000000;
+}
+
+#muzx_paginator_left a.muzx_pages {
+    color:#000000;
+}
+
+#muzx_paginator_right {
+    float: right;
+}
