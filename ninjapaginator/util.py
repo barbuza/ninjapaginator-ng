@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import urllib
-
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404
