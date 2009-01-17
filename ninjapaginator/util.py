@@ -53,7 +53,7 @@ class NinjaPaginator(object):
         extra_params = ""
 
         for k,v in params.items():
-            extra_params += "%s=%s" % (k, v)
+            extra_params += "&%s=%s" % (k, v)
 
         self.paginate_qs = self.output.pop(self.object_list)
         self.paginator = Paginator(self.paginate_qs, self.per_page)
