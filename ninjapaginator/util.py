@@ -11,7 +11,7 @@ class NinjaPaginator(object):
     Pagination decorator with multiple types of pagination
     Should be used along with 'render_to' decorator
     from django-annoying application
-    http://www.assembla.com/spaces/django-annoying
+    http://bitbucket.org/offline/django-annoying/wiki/Home
     """
 
     def __init__(self, object_list='object_list', style='digg', per_page=10, frame_size=8):
@@ -21,6 +21,7 @@ class NinjaPaginator(object):
         self.object_list = object_list
         self.style = style
         self.per_page = per_page
+        self.per_page_backup = per_page
         self.frame_size = frame_size
         
     def __call__(self, function):
@@ -48,6 +49,8 @@ class NinjaPaginator(object):
         if "per_page" in params:
             self.per_page = int(params['per_page'])
         else:
+            # reset per_page variable to default
+            self.per_page = self.per_page_backup
             params['per_page'] = self.per_page
             
         extra_params = ""
