@@ -41,9 +41,9 @@ class NinjaPaginator(object):
         
         params = request.GET.copy()
         
-        if "page" in params:
+        try:
             self.page_num = int(params.pop('page')[0])
-        else:
+        except (ValueError, KeyError):
             self.page_num = 1
 
         if "per_page" in params:
