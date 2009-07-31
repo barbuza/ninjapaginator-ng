@@ -1,9 +1,21 @@
 # -*- coding: utf-8 -*-
 
+from urllib import urlencode
+
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator, EmptyPage
 from django.http import Http404
+from django.conf import settings
 
+
+def unicode_urlencode(params):
+    """
+    A unicode aware version of urllib.urlencode
+    """
+
+    if isinstance(params, dict):
+        params = params.items()
+    return urlencode([(k, isinstance(v, unicode) and v.encode('utf-8') or v) for k, v in params])
 
 
 class NinjaPaginator(object):
@@ -14,12 +26,12 @@ class NinjaPaginator(object):
     http://bitbucket.org/offline/django-annoying/wiki/Home
     """
 
-    def __init__(self, object_list='object_list', style='digg', per_page=10, frame_size=8):
+    def __init__(self, object_list='object_list', style=None, per_page=10, frame_size=8):
         """
         receive decorator parameters 
         """
         self.object_list = object_list
-        self.style = style
+        self.style = style or getattr(settings, "PAGINATION_STYLE", "digg")
         self.per_page = per_page
         self.per_page_backup = per_page
         self.frame_size = frame_size
@@ -53,10 +65,7 @@ class NinjaPaginator(object):
             self.per_page = self.per_page_backup
             params['per_page'] = self.per_page
             
-        extra_params = ""
-
-        for k,v in params.items():
-            extra_params += "&%s=%s" % (k, v)
+        extra_params = unicode_urlencode(params)
 
         self.paginate_qs = self.output.pop(self.object_list)
         self.paginator = Paginator(self.paginate_qs, self.per_page)
