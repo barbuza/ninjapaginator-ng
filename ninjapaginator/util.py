@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from functools import partial
+from functools import partial, update_wrapper
 from urllib import urlencode
 
 from django.utils.datastructures import MultiValueDictKeyError
@@ -47,8 +47,7 @@ class NinjaPaginator(object):
         receive decorated function and return decorate method
         """
         decorated = partial(self.decorate, function)
-        decorated.__module__ = function.__module__
-        decorated.__name__ = function.__name__
+        update_wrapper(decorated, self.decorate)
         return decorated
     
     def decorate(self, function, request, *args, **kwargs):
