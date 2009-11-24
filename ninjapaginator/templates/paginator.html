@@ -1,13 +1,3 @@
 {% load paginator %}
 
-{% if paginator_digg %}
-  {% include "paginator_digg.html" %}
-{% endif %}
-
-{% if paginator_filmfeed %}
-  {% include "paginator_filmfeed.html" %}
-{% endif %}
-
-{% if paginator_muzx %}
-  {% include "paginator_muzx.html" %}
-{% endif %}
+{% include paginator_template %}

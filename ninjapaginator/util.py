@@ -32,8 +32,8 @@ class NinjaPaginator(object):
         receive decorator parameters 
         """
         self.object_list = object_list
-        style = style or getattr(settings, "PAGINATION_STYLE", "digg")
-        self.style = getattr(self, '%s_style' % style)
+        self.style = style or getattr(settings, "PAGINATION_STYLE", "digg")
+        self.style_fn = getattr(self, '%s_style' % self.style)
         self.per_page = per_page
         self.frame_size = frame_size
         self.allow_user_per_page = allow_user_per_page
@@ -85,9 +85,11 @@ class NinjaPaginator(object):
         output['params'] = unicode_urlencode(params)
         pages = paginator.num_pages
         output[self.object_list] = page.object_list
-        output['paginator_%s' % self.style] = True
+        output['paginator_template'] = 'paginator_%s.html' % self.style
         
-        output.update(self.style(pages, page_num))
+        output.update(self.style_fn(pages, page_num))
+        
+        print output
         return output
 
     
