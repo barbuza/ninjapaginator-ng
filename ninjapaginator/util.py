@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from functools import partial
 from urllib import urlencode
 
 from django.utils.datastructures import MultiValueDictKeyError
@@ -45,15 +46,17 @@ class NinjaPaginator(object):
         """
         receive decorated function and return decorate method
         """
-        self.function = function
-        return self.decorate
+        decorated = partial(self.decorate, function)
+        decorated.__module__ = function.__module__
+        decorated.__name__ = function.__name__
+        return decorated
     
-    def decorate(self, request, *args, **kwargs):
+    def decorate(self, function, request, *args, **kwargs):
         """
         style pagination according to 'style' parameter
         """
         
-        function_output = self.function(request, *args, **kwargs)
+        function_output = function(request, *args, **kwargs)
         
         if not isinstance(function_output, dict):
             return function_output
