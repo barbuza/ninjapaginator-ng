@@ -27,7 +27,8 @@ class NinjaPaginator(object):
     """
 
     def __init__(self, object_list='object_list', style=None, per_page=10, frame_size=8,
-                 allow_user_per_page=False):
+                 allow_user_per_page=False, fixed_user_per_page=None,
+                 paginator_name=None):
         """
         receive decorator parameters 
         """
@@ -37,6 +38,8 @@ class NinjaPaginator(object):
         self.per_page = per_page
         self.frame_size = frame_size
         self.allow_user_per_page = allow_user_per_page
+        self.paginator_name = paginator_name or '%s_paginator' % object_list
+        self.fixed_user_per_page = fixed_user_per_page
         
     def __call__(self, function):
         """
@@ -50,11 +53,12 @@ class NinjaPaginator(object):
         style pagination according to 'style' parameter
         """
         
-        output = self.function(request, *args, **kwargs)
+        function_output = self.function(request, *args, **kwargs)
         
-        if not isinstance(output, dict):
-            return output
+        if not isinstance(function_output, dict):
+            return function_output
         
+        output = {}
         params = request.GET.copy()
         
         page_num = 1
@@ -66,13 +70,16 @@ class NinjaPaginator(object):
         per_page = self.per_page
         if self.allow_user_per_page and 'per_page' in params:
             try:
-                per_page = int(params['per_page'])
+                user_per_page = int(params['per_page'])
+                if not self.fixed_user_per_page or\
+                        user_per_page not in self.fixed_user_per_page:
+                    per_page = user_per_page
             except (ValueError, KeyError):
                 params['per_page'] = self.per_page
         elif 'per_page' in params:
             params.pop('per_page')
         
-        paginate_qs = output.pop(self.object_list)
+        paginate_qs = function_output.pop(self.object_list)
         paginator = Paginator(paginate_qs, per_page)
         
         try:
@@ -84,12 +91,14 @@ class NinjaPaginator(object):
         output['per_page'] = per_page
         output['params'] = unicode_urlencode(params)
         pages = paginator.num_pages
-        output[self.object_list] = page.object_list
+        function_output[self.object_list] = page.object_list
         output['paginator_template'] = 'paginator_%s.html' % self.style
-        
+        output['allow_user_per_page'] = self.allow_user_per_page
         output.update(self.style_fn(pages, page_num))
         
-        return output
+        function_output[self.paginator_name] = output
+        
+        return function_output
 
     
     def digg_style(self, pages, page_num):

@@ -11,3 +11,8 @@ def page_link(num_page, params):
     if params:
         return '%s&amp;%s' % (link, params.replace('&', '&amp;'))
     return link
+
+
+@register.inclusion_tag('paginator.html')
+def paginate(obj):
+    return obj
