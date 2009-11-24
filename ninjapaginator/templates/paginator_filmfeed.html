@@ -4,6 +4,6 @@
     {% ifequal i page_num %}
         <span class="filmfeed_pages_disabled">{{ i }}</span>
     {% else %}
-        <a href='{% page_link i params %}' class="filmfeed_pages">{{ i }}</a>
+        <a href='{% page_link i params anchor %}' class="filmfeed_pages">{{ i }}</a>
     {% endifequal %}
 {% endfor %}

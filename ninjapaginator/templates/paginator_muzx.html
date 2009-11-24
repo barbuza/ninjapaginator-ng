@@ -4,9 +4,9 @@
   <div id="muzx_paginator_left">
     {% for i in page_numbers %}
       {% ifequal i page_num %}
-        <a href='{% page_link i params %}' class="muzx_pages_current">{{ i }}</a>
+        <a href='{% page_link i params anchor %}' class="muzx_pages_current">{{ i }}</a>
       {% else %}
-        <a href='{% page_link i params %}' class="muzx_pages">{{ i }}</a>
+        <a href='{% page_link i params anchor %}' class="muzx_pages">{{ i }}</a>
       {% endifequal %}
     {% endfor %}
   </div>

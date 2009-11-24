@@ -29,7 +29,7 @@ class NinjaPaginator(object):
 
     def __init__(self, object_list='object_list', style=None, per_page=10, frame_size=8,
                  allow_user_per_page=False, fixed_user_per_page=None,
-                 paginator_name=None, template=None):
+                 paginator_name=None, template=None, anchor=None):
         """
         receive decorator parameters 
         """
@@ -42,10 +42,12 @@ class NinjaPaginator(object):
         self.paginator_name = paginator_name or '%s_paginator' % object_list
         self.template = template or 'paginator_%s.html' % self.style
         self.fixed_user_per_page = fixed_user_per_page
+        self.anchor = anchor
         
     def __call__(self, function):
         """
-        receive decorated function and return decorate method
+        receive decorated function and return
+        function decorated with decorate method
         """
         decorated = partial(self.decorate, function)
         return update_wrapper(decorated, self.decorate)
@@ -92,6 +94,7 @@ class NinjaPaginator(object):
         output['page_num'] = page_num
         output['per_page'] = per_page
         output['params'] = unicode_urlencode(params)
+        output['anchor'] = self.anchor
         pages = paginator.num_pages
         function_output[self.object_list] = page.object_list
         output['paginator_template'] = self.template

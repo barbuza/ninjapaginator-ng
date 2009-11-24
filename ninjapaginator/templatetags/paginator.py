@@ -6,10 +6,12 @@ register = Library()
 
 
 @register.simple_tag
-def page_link(num_page, params):
+def page_link(num_page, params, anchor):
     link = '?page=%s' % num_page
     if params:
-        return '%s&amp;%s' % (link, params.replace('&', '&amp;'))
+        link = '%s&amp;%s' % (link, params.replace('&', '&amp;'))
+    if anchor:
+        link += '#%s' % anchor
     return link
 
 
