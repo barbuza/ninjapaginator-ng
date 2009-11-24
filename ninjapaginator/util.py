@@ -47,8 +47,7 @@ class NinjaPaginator(object):
         receive decorated function and return decorate method
         """
         decorated = partial(self.decorate, function)
-        update_wrapper(decorated, self.decorate)
-        return decorated
+        return update_wrapper(decorated, self.decorate)
     
     def decorate(self, function, request, *args, **kwargs):
         """
