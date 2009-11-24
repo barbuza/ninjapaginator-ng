@@ -1,0 +1,45 @@
+{% load paginator %}
+
+{% if PREVIOUS %}
+  <a href='{% page_link PREVIOUS params %}' class="digg_nextprev">&lt;&lt; Previous</a>
+{% else %}
+  <span class="digg_nextprev_disabled">&lt;&lt; Previous</span>
+{% endif %}
+
+{% if left_page_numbers %}
+  {% for i in left_page_numbers %}
+    {% ifequal i page_num %}
+      <span class="digg_pages_disabled">{{ i }}</span>
+    {% else %}
+      <a class="digg_pages" href='{% page_link i params %}'>{{ i }}</a>
+    {% endifequal %}
+  {% endfor %}
+{% endif %}
+
+{% if middle_page_numbers %}
+  <span class="digg_seperator">...</span>
+  {% for i in middle_page_numbers %}
+    {% ifequal i page_num %}
+      <span class="digg_pages_disabled">{{ i }}</span>
+    {% else %}
+      <a class="digg_pages" href='{% page_link i params %}'>{{ i }}</a>
+    {% endifequal %}
+  {% endfor %}
+{% endif %}
+
+{% if right_page_numbers %}
+  <span class="digg_seperator">...</span>
+    {% for i in right_page_numbers %}
+      {% ifequal i page_num %}
+        <span class="digg_pages_disabled">{{ i }}</span>
+      {% else %}
+        <a class="digg_pages" href='{% page_link i params %}'>{{ i }}</a>
+      {% endifequal %}
+  {% endfor %}
+{% endif %}
+
+{% if NEXT %}
+  <a href='{% page_link i params %}' class="digg_nextprev">Next &gt;&gt;</a>
+{% else %}
+  <span class="digg_nextprev_disabled">Next &gt;&gt;</span>
+{% endif %}
