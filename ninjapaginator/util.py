@@ -89,7 +89,6 @@ class NinjaPaginator(object):
         
         output.update(self.style_fn(pages, page_num))
         
-        print output
         return output
 
     

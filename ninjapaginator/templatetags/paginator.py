@@ -9,6 +9,5 @@ register = Library()
 def page_link(num_page, params):
     link = '?page=%s' % num_page
     if params:
-        return '%s&amp;%s' (link, params.replace('&', '&amp;'))
+        return '%s&amp;%s' % (link, params.replace('&', '&amp;'))
     return link
-    
