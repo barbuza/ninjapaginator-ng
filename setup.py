@@ -8,7 +8,7 @@ setup(
     description = "Django application with multiple type of pagination integrated",
     license = "BSD",
     keywords = "django",
-    url = "http://bitbucket.org/barbuza/django-ninjapaginator/",
+    url = "https://github.com/barbuza/ninjapaginator-ng",
     install_requires = ["django-annoying"],
     include_package_data = True,
     zip_safe = False
