@@ -36,14 +36,20 @@ class NinjaPaginator(object):
         self.object_list = object_list
         self.style = style or getattr(settings, "PAGINATION_STYLE", "digg")
         self.style_fn = getattr(self, '%s_style' % self.style)
-        self.per_page = per_page
+        self._per_page = per_page
         self.frame_size = frame_size
         self.allow_user_per_page = allow_user_per_page
         self.paginator_name = paginator_name or '%s_paginator' % object_list
         self.template = template or 'paginator_%s.html' % self.style
         self.fixed_user_per_page = fixed_user_per_page
         self.anchor = anchor
-        
+    
+    @property
+    def per_page(self):
+        if callable(self._per_page):
+            return self._per_page()
+        return self._per_page
+    
     def __call__(self, function):
         """
         receive decorated function and return
